@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\AndroidStudioProjects\\AppMarket\\sample\\build\\intermediates\\res\\merged\\debug\\drawable\\background_tab.xml",
+        "source": "D:\\AndroidStudioProjects\\AppMarket\\sample\\build\\intermediates\\exploded-aar\\AppMarket\\library\\unspecified\\res\\drawable\\background_tab.xml"
+    },
+    {
+        "merged": "D:\\AndroidStudioProjects\\AppMarket\\sample\\build\\intermediates\\res\\merged\\debug\\drawable\\background_tabs_diagonal.xml",
+        "source": "D:\\AndroidStudioProjects\\AppMarket\\sample\\res\\drawable\\background_tabs_diagonal.xml"
+    },
+    {
+        "merged": "D:\\AndroidStudioProjects\\AppMarket\\sample\\build\\intermediates\\res\\merged\\debug\\drawable\\background_tabs.xml",
+        "source": "D:\\AndroidStudioProjects\\AppMarket\\sample\\res\\drawable\\background_tabs.xml"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\AndroidStudioProjects\\AppMarket\\sample\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
+        "source": "D:\\AndroidStudioProjects\\AppMarket\\sample\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "D:\\AndroidStudioProjects\\AppMarket\\sample\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_quick_contact.xml",
+        "source": "D:\\AndroidStudioProjects\\AppMarket\\sample\\res\\layout\\fragment_quick_contact.xml"
+    }
+]
