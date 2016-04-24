@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.buaa.tezlikai.appmarket.R;
+import com.buaa.tezlikai.appmarket.factory.ThreadPoolFactory;
 import com.buaa.tezlikai.appmarket.utils.LogUtils;
 import com.buaa.tezlikai.appmarket.utils.UIUtils;
 
@@ -122,7 +123,8 @@ public abstract class LoadingPager extends FrameLayout{
             int state = STATE_LOADING;
             mCurState =state;
             refreshUI();//2.显示正在加载时
-            new Thread(new LoadDataTask()).start();
+//            new Thread(new LoadDataTask()).start();
+            ThreadPoolFactory.getNormalPool().execute(new LoadDataTask());//通过线程池实现
         }
     }
 

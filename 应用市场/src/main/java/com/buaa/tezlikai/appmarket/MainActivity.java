@@ -1,15 +1,18 @@
 package com.buaa.tezlikai.appmarket;
 
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,6 +28,8 @@ public class MainActivity extends ActionBarActivity {
     private PagerSlidingTabStripExtends mTabs;
     private ViewPager mViewPager;
     private String[] mMainTitles;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +37,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         initVIew();
         initActionBar();
+        initActionBarToggle();
         initData();
         initListener();
     }
+
 
 
 
@@ -44,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
     private void initVIew() {
         mTabs = (PagerSlidingTabStripExtends) findViewById(R.id.main_tabs);
         mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawlayout);
     }
 
     private void initActionBar() {
@@ -54,6 +62,31 @@ public class MainActivity extends ActionBarActivity {
         actionBar.setLogo(R.drawable.ic_launcher);//设置logo
         actionBar.setTitle("应用市场");//设置Titile
 
+        //显示返回按钮
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer_am);
+
+    }
+    private void initActionBarToggle() {
+        mToggle = new ActionBarDrawerToggle(this,mDrawerLayout, R.drawable.ic_drawer_am,R.string.open,R.string.close);
+
+        //同步状态的方法
+        mToggle.syncState();
+        //设置mDrawerLayout拖动的监听
+        mDrawerLayout.setDrawerListener(mToggle);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                //mToggle控制打开关闭drawlayout
+                mToggle.onOptionsItemSelected(item);
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
