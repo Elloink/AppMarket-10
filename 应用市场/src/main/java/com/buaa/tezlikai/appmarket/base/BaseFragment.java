@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.buaa.tezlikai.appmarket.utils.UIUtils;
 import com.buaa.tezlikai.appmarket.base.LoadingPager.LoadedResult;
+import com.buaa.tezlikai.appmarket.utils.UIUtils;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/4/23.
@@ -78,5 +81,28 @@ public abstract class BaseFragment extends Fragment {
      * 正在加载数据完成之后,并且数据加载成功,我们必须告知具体的成功视图
      */
     protected abstract View initSuccessView();
+
+    /**
+     * @param obj 网络数据json化之后的对象
+     * @return
+     */
+    public LoadedResult checkState(Object obj) {
+        if (obj == null) {
+            return LoadedResult.EMPTY;
+        }
+        // list
+        if (obj instanceof List) {
+            if (((List) obj).size() == 0) {
+                return LoadedResult.EMPTY;
+            }
+        }
+        // map
+        if (obj instanceof Map) {
+            if (((Map) obj).size() == 0) {
+                return LoadedResult.EMPTY;
+            }
+        }
+        return LoadedResult.SUCCESS;
+    }
 
 }
