@@ -63,5 +63,34 @@ public class UIUtils {
 		}
 
 	}
+	/**延迟执行任务*/
+	public static void postTaskDelay(Runnable task, int delayMillis) {
+		getMainThreadHandler().postDelayed(task, delayMillis);
+	}
+
+	/**移除任务*/
+	public static void removeTask(Runnable task) {
+		getMainThreadHandler().removeCallbacks(task);//移除任务
+	}
+
+	/**
+	 * dip-->px
+	 */
+	public static int dip2Px(int dip) {
+		// px/dip = density;density:屏幕的密度比值
+		float density = getResource().getDisplayMetrics().density;//获取density的方法
+		int px = (int) (dip * density + .5f);
+		return px;
+	}
+
+	/**
+	 * px-->dip
+	 */
+	public static int px2Dip(int px) {
+		// px/dip = density;
+		float density = getResource().getDisplayMetrics().density;
+		int dip = (int) (px / density + .5f);
+		return dip;
+	}
 
 }

@@ -18,7 +18,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 /**
  * Created by Administrator on 2016/4/24.
  */
-public class HomeHolder extends BaseHolder<AppInfoBean>{
+public class AppItemHolder extends BaseHolder<AppInfoBean>{
 
     @ViewInject(R.id.item_appinfo_iv_icon)
     private ImageView mIvIcon;

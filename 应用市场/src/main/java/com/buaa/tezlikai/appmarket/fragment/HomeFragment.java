@@ -1,7 +1,5 @@
 package com.buaa.tezlikai.appmarket.fragment;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AbsListView;
@@ -15,7 +13,9 @@ import com.buaa.tezlikai.appmarket.base.LoadingPager.LoadedResult;
 import com.buaa.tezlikai.appmarket.base.SuperBaseAdapter;
 import com.buaa.tezlikai.appmarket.bean.AppInfoBean;
 import com.buaa.tezlikai.appmarket.bean.HomeBean;
-import com.buaa.tezlikai.appmarket.holder.HomeHolder;
+import com.buaa.tezlikai.appmarket.factory.ListViewFactory;
+import com.buaa.tezlikai.appmarket.holder.AppItemHolder;
+import com.buaa.tezlikai.appmarket.holder.PictureHolder;
 import com.buaa.tezlikai.appmarket.protocol.HomeProtocol;
 import com.buaa.tezlikai.appmarket.utils.UIUtils;
 
@@ -27,7 +27,7 @@ import java.util.List;
 public class HomeFragment extends BaseFragment {
 
     private List<AppInfoBean> mDatas;  //listView的数据源
-    private List<String> picutures;//轮播图
+    private List<String> mPicutures;//轮播图
     private HomeProtocol mProtocol;
 
     @Override
@@ -77,7 +77,7 @@ public class HomeFragment extends BaseFragment {
                 return state;
             }
             mDatas = homeBean.list;
-            picutures = homeBean.picture;
+            mPicutures = homeBean.picture;
             return LoadedResult.SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,12 +88,16 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected View initSuccessView() {
         //返回成功视图
-        ListView listView = new ListView(UIUtils.getContext());
-        //简单的设置
-        listView.setCacheColorHint(Color.TRANSPARENT);
-        listView.setFastScrollEnabled(true);
+        ListView listView = ListViewFactory.createListView();
 
-        listView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        // 创建一个PictureHolder
+        PictureHolder pictureHolder = new PictureHolder();
+        // 触发加载数据
+        pictureHolder.setDataAndRefreshHolderView(mPicutures);
+
+        View headView = pictureHolder.getmHolderView();
+        listView.addHeaderView(headView);//添加图片轮播
+
         //设置Adapter
         listView.setAdapter(new HomeAdapter(listView,mDatas));
 
@@ -108,9 +112,9 @@ public class HomeFragment extends BaseFragment {
         }
 
         @Override
-        public BaseHolder<AppInfoBean> getSpecialHolder() {
+        public BaseHolder<AppInfoBean> getSpecialHolder(int positon) {
 
-            return new HomeHolder();
+            return new AppItemHolder();
         }
 
         @Override

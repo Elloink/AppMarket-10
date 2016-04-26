@@ -1,34 +1,63 @@
 package com.buaa.tezlikai.appmarket.fragment;
 
-import android.os.SystemClock;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.AbsListView;
+import android.widget.ListView;
 
 import com.buaa.tezlikai.appmarket.base.BaseFragment;
+import com.buaa.tezlikai.appmarket.base.BaseHolder;
 import com.buaa.tezlikai.appmarket.base.LoadingPager;
-import com.buaa.tezlikai.appmarket.utils.UIUtils;
+import com.buaa.tezlikai.appmarket.base.SuperBaseAdapter;
+import com.buaa.tezlikai.appmarket.bean.AppInfoBean;
+import com.buaa.tezlikai.appmarket.factory.ListViewFactory;
+import com.buaa.tezlikai.appmarket.holder.AppItemHolder;
+import com.buaa.tezlikai.appmarket.protocol.GameProtocol;
 
-import java.util.Random;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/4/22.
  */
 public class GameFragment extends BaseFragment {
+
+    private GameProtocol mGameProtocol;
+    private List<AppInfoBean> mDatas;
+
     @Override
     public LoadingPager.LoadedResult initData() {//真正加载数据
-        SystemClock.sleep(2000);
-
-        LoadingPager.LoadedResult[] arr = {LoadingPager.LoadedResult.ERROR, LoadingPager.LoadedResult.SUCCESS, LoadingPager.LoadedResult.EMPTY};
-        Random random = new Random();
-        int index = random.nextInt(arr.length);
-        return arr[index];
+        mGameProtocol = new GameProtocol();
+        try {
+            mDatas = mGameProtocol.loadData(0);
+            return checkState(mDatas);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return LoadingPager.LoadedResult.ERROR;
+        }
     }
 
     @Override
     protected View initSuccessView() {
         //返回视图
-        TextView tv = new TextView(UIUtils.getContext());
-        tv.setText(this.getClass().getSimpleName()+"北京航空航天大学");
-        return tv;
+        ListView listView = ListViewFactory.createListView();
+
+        listView.setAdapter(new GameAdapter(listView,mDatas));
+        return listView;
+    }
+
+    private class GameAdapter extends SuperBaseAdapter {
+
+        public GameAdapter(AbsListView absListView, List dataSource) {
+            super(absListView, dataSource);
+        }
+
+        @Override
+        public BaseHolder getSpecialHolder(int positon) {
+            return new AppItemHolder();
+        }
+
+        @Override
+        public List onLoadMore() throws Exception {
+            return mGameProtocol.loadData(mDatas.size());
+        }
     }
 }

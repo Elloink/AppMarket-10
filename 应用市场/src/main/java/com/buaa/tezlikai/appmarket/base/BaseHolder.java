@@ -9,6 +9,10 @@ public abstract class BaseHolder<HODLERBEANTYPE> {
 
 	public View	mHolderView;
 
+	public View getmHolderView() {
+		return mHolderView;
+	}
+
 	// 做holder需要持有孩子对象
 	private HODLERBEANTYPE	mData;
 

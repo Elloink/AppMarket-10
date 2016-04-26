@@ -70,6 +70,15 @@ public abstract class SuperBaseAdapter<ITEMBEANTYPE> extends BaseAdapter impleme
 		if (position == getCount() - 1) {// 滑到底部
 			return VIEWTYPE_LOADMORE;
 		}
+		return getNormalViewType(position);
+	}
+
+	/**
+	 * 子类其实可以复写该方法，添加更多的viewType
+	 * @param position
+	 * @return 返回普通view的一个viewType
+	 */
+	public int getNormalViewType(int position) {
 		return VIEWTYPE_NORMAL;
 	}
 
@@ -84,7 +93,7 @@ public abstract class SuperBaseAdapter<ITEMBEANTYPE> extends BaseAdapter impleme
 				if (getItemViewType(position) == VIEWTYPE_LOADMORE){
 				holder = (BaseHolder<ITEMBEANTYPE>) getLoadMoreHolder();
 				}else {
-					holder = getSpecialHolder();
+					holder = getSpecialHolder(position);
 				}
 			} else {
 			holder = (BaseHolder) convertView.getTag();
@@ -110,7 +119,7 @@ public abstract class SuperBaseAdapter<ITEMBEANTYPE> extends BaseAdapter impleme
 	 * @call getView方法中如果没有convertView的时候被创建
 	 * @return
 	 */
-	public abstract BaseHolder<ITEMBEANTYPE> getSpecialHolder();
+	public abstract BaseHolder<ITEMBEANTYPE> getSpecialHolder(int position);
 
 	/**
 	 * @return  返回一个加载更多的holder
