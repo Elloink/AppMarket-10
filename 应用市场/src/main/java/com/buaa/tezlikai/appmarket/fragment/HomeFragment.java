@@ -3,21 +3,16 @@ package com.buaa.tezlikai.appmarket.fragment;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.buaa.tezlikai.appmarket.adapter.AppItemAdapter;
 import com.buaa.tezlikai.appmarket.base.BaseFragment;
-import com.buaa.tezlikai.appmarket.base.BaseHolder;
 import com.buaa.tezlikai.appmarket.base.LoadingPager.LoadedResult;
-import com.buaa.tezlikai.appmarket.base.SuperBaseAdapter;
 import com.buaa.tezlikai.appmarket.bean.AppInfoBean;
 import com.buaa.tezlikai.appmarket.bean.HomeBean;
 import com.buaa.tezlikai.appmarket.factory.ListViewFactory;
-import com.buaa.tezlikai.appmarket.holder.AppItemHolder;
 import com.buaa.tezlikai.appmarket.holder.PictureHolder;
 import com.buaa.tezlikai.appmarket.protocol.HomeProtocol;
-import com.buaa.tezlikai.appmarket.utils.UIUtils;
 
 import java.util.List;
 
@@ -104,7 +99,7 @@ public class HomeFragment extends BaseFragment {
         return listView;
     }
 
-    class HomeAdapter extends SuperBaseAdapter<AppInfoBean>{
+    class HomeAdapter extends AppItemAdapter{
 
 
         public HomeAdapter(AbsListView absListView, List<AppInfoBean> dataSource) {
@@ -112,23 +107,10 @@ public class HomeFragment extends BaseFragment {
         }
 
         @Override
-        public BaseHolder<AppInfoBean> getSpecialHolder(int positon) {
-
-            return new AppItemHolder();
-        }
-
-        @Override
         public List<AppInfoBean> onLoadMore() throws Exception {
             //SystemClock.sleep(2000);
             return loadMore(mDatas.size());
-
         }
-
-        @Override
-        public void onNormalItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(UIUtils.getContext(),mDatas.get(position).packageName,Toast.LENGTH_SHORT).show();
-        }
-
         @Nullable
         public List<AppInfoBean> loadMore(int index) throws Exception {
             //真正加载更多的数据

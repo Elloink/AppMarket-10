@@ -15,6 +15,7 @@ public class Constants {
 		public static final String	BASEURL			= "http://192.168.56.1:8080/GooglePlayServer/";
 		// http://localhost:8080/GooglePlayServer/image?name=
 		public static final String	IMAGEBASEURL	= BASEURL + "image?name=";
+		public static final String HTTP = "HTTP";
 	}
 
 	public static final class PAY {//支付相关

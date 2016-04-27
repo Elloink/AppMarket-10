@@ -15,4 +15,11 @@
 
     <string name="open">open</string>
     <string name="close">close</string>
+
+    <!-- 应用详情 %1$s: %1:表示一行中第一个占位符，$s：表示啥类型-->
+    <string name="detatil_downloadnum">下载:%1$s</string>
+    <string name="detatil_version">版本:%1$s</string>
+    <string name="detatil_date">时间:%1$s</string>
+    <string name="detatil_size">大小:%1$s</string>
+
 </resources>

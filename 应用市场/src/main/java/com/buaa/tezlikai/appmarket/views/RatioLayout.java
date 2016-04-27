@@ -12,13 +12,21 @@ import com.buaa.tezlikai.appmarket.R;
  * RatioLayout
  */
 public class RatioLayout extends FrameLayout {
-	private float				mPicRatio		= 0f;				// 图片的宽高比 2.43
-	private static final int	RELATIVE_WIDTH	= 0;				// 控件宽度固定,已知图片的宽高比,求控件的高度
+	public float				mPicRatio		= 0f;				// 图片的宽高比 2.43
+	public static final int	RELATIVE_WIDTH	= 0;				// 控件宽度固定,已知图片的宽高比,求控件的高度
 	private static final int	RELATIVE_HEIGHT	= 1;				// 控件高度固定,已知图片的宽高比,求控件的宽度
-	private int					mRelative		= RELATIVE_WIDTH;
+	private int	mRelative	= RELATIVE_WIDTH;
 
 	public RatioLayout(Context context) {
 		this(context, null);
+	}
+
+	public void setPicRatio(float mPicRatio) {
+		this.mPicRatio = mPicRatio;
+	}
+
+	public void setRelative(int mRelative) {
+		this.mRelative = mRelative;
 	}
 
 	public RatioLayout(Context context, AttributeSet attrs) {
@@ -92,4 +100,5 @@ public class RatioLayout extends FrameLayout {
 		}
 
 	}
+
 }

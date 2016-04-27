@@ -4,13 +4,11 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.buaa.tezlikai.appmarket.adapter.AppItemAdapter;
 import com.buaa.tezlikai.appmarket.base.BaseFragment;
-import com.buaa.tezlikai.appmarket.base.BaseHolder;
 import com.buaa.tezlikai.appmarket.base.LoadingPager;
-import com.buaa.tezlikai.appmarket.base.SuperBaseAdapter;
 import com.buaa.tezlikai.appmarket.bean.AppInfoBean;
 import com.buaa.tezlikai.appmarket.factory.ListViewFactory;
-import com.buaa.tezlikai.appmarket.holder.AppItemHolder;
 import com.buaa.tezlikai.appmarket.protocol.AppProtocol;
 
 import java.util.List;
@@ -49,15 +47,10 @@ public class AppFragment extends BaseFragment {
         return listView;
     }
 
-    private class AppAdapter extends SuperBaseAdapter {
+    private class AppAdapter extends AppItemAdapter {
 
         public AppAdapter(AbsListView absListView, List dataSource) {
             super(absListView, dataSource);
-        }
-
-        @Override
-        public BaseHolder getSpecialHolder(int positon) {
-            return new AppItemHolder();
         }
 
         @Override

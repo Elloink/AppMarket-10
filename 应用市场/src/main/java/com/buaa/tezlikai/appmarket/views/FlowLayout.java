@@ -12,8 +12,7 @@ import java.util.List;
  * FlowLayout
  * 流式布局:用来显示排行主题
  */
-public class FlowLayout extends ViewGroup
-{
+public class FlowLayout extends ViewGroup {
 	private List<Line>	mLines				= new ArrayList<Line>(); // 用来记录描述有多少行View
 	private Line		mCurrrenLine;							  // 用来记录当前已经添加到了哪一行
 	private int			mHorizontalSpace	= 10;

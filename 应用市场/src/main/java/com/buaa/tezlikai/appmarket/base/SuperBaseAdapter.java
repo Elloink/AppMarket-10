@@ -6,6 +6,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 
 import com.buaa.tezlikai.appmarket.conf.Constants;
 import com.buaa.tezlikai.appmarket.factory.ThreadPoolFactory;
@@ -21,6 +22,7 @@ import java.util.List;
  * SuperBaseAdapter
  */
 public abstract class SuperBaseAdapter<ITEMBEANTYPE> extends BaseAdapter implements OnItemClickListener {
+	private final AbsListView mAbsListView;
 	public List<ITEMBEANTYPE>	mDataSource	= new ArrayList<ITEMBEANTYPE>();
 
 	public static final int		VIEWTYPE_LOADMORE	= 0;
@@ -32,6 +34,7 @@ public abstract class SuperBaseAdapter<ITEMBEANTYPE> extends BaseAdapter impleme
 		super();
 		absListView.setOnItemClickListener(this);
 		mDataSource = dataSource;
+		mAbsListView = absListView;//获取传入的listView
 	}
 
 	@Override
@@ -215,6 +218,10 @@ public abstract class SuperBaseAdapter<ITEMBEANTYPE> extends BaseAdapter impleme
 	/*=============== 处理item的点击事件 ===============*/
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		if (mAbsListView instanceof ListView){
+			//因为首页有轮播图，所有占一个position，所以索引的整体减去getHeaderViewsCount（）
+			position = position - ((ListView) mAbsListView).getHeaderViewsCount();
+		}
 		if (getItemViewType(position) == VIEWTYPE_LOADMORE) {
 			// 重新加载更多
 			perFormLoadMore();
