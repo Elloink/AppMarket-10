@@ -1,11 +1,13 @@
 package com.buaa.tezlikai.appmarket.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.buaa.tezlikai.appmarket.R;
+import com.buaa.tezlikai.appmarket.base.BaseActivity;
 import com.buaa.tezlikai.appmarket.base.LoadingPager;
 import com.buaa.tezlikai.appmarket.base.LoadingPager.LoadedResult;
 import com.buaa.tezlikai.appmarket.bean.AppInfoBean;
@@ -14,12 +16,13 @@ import com.buaa.tezlikai.appmarket.holder.AppDetailDesHolder;
 import com.buaa.tezlikai.appmarket.holder.AppDetailInfoHolder;
 import com.buaa.tezlikai.appmarket.holder.AppDetailPicHolder;
 import com.buaa.tezlikai.appmarket.holder.AppDetailSafeHolder;
+import com.buaa.tezlikai.appmarket.manager.DownloadManager;
 import com.buaa.tezlikai.appmarket.protocol.DetailProtocol;
 import com.buaa.tezlikai.appmarket.utils.UIUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
-public class DetailActivity extends ActionBarActivity {
+public class DetailActivity extends BaseActivity {
 
     private String mPackageName;
     private AppInfoBean mDatas;
@@ -38,11 +41,17 @@ public class DetailActivity extends ActionBarActivity {
 
     @ViewInject(R.id.app_detail_safe)
     FrameLayout	mContainerSafe;
+    private LoadingPager mLoadingPager;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        init();
-        LoadingPager loadingPager = new LoadingPager(UIUtils.getContext()) {
+    public void init() {
+        mPackageName = getIntent().getStringExtra("packageName");
+    }
+
+    @NonNull
+    @Override
+    public void initView() {
+        mLoadingPager = new LoadingPager(UIUtils.getContext()) {
             @Override
             protected LoadedResult initData() {
                 return onInitData();
@@ -53,14 +62,31 @@ public class DetailActivity extends ActionBarActivity {
                 return onLoadSuccessView();
             }
         };
-        //触发加载数据
-        loadingPager.loadData();
-
-        setContentView(loadingPager);
+        setContentView(mLoadingPager);
     }
 
-    private void init() {
-        mPackageName = getIntent().getStringExtra("packageName");
+    @Override
+    public void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("应用市场");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+    @Override
+    public void initData() {
+        mLoadingPager.loadData();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 
     private LoadedResult onInitData() {
@@ -107,6 +133,8 @@ public class DetailActivity extends ActionBarActivity {
         AppDetailBottomHolder appDetailBottomHolder = new AppDetailBottomHolder();
         mContainerBottom.addView(appDetailBottomHolder.getmHolderView());
         appDetailBottomHolder.setDataAndRefreshHolderView(mDatas);
+
+        DownloadManager.getInstance().addObserver(appDetailBottomHolder);
         return view;
     }
 

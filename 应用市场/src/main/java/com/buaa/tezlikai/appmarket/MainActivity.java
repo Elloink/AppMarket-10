@@ -1,6 +1,5 @@
 package com.buaa.tezlikai.appmarket;
 
-import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +9,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +16,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStripExtends;
+import com.buaa.tezlikai.appmarket.base.BaseActivity;
 import com.buaa.tezlikai.appmarket.base.BaseFragment;
 import com.buaa.tezlikai.appmarket.factory.FragmentFactory;
 import com.buaa.tezlikai.appmarket.utils.LogUtils;
 import com.buaa.tezlikai.appmarket.utils.UIUtils;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseActivity {
 
     private PagerSlidingTabStripExtends mTabs;
     private ViewPager mViewPager;
@@ -31,30 +30,19 @@ public class MainActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initVIew();
-        initActionBar();
-        initActionBarToggle();
-        initData();
-        initListener();
-    }
-
-
-
-
     /**
      * 初始化View
      */
-    private void initVIew() {
+    @Override
+    public void initView() {
+        setContentView(R.layout.activity_main);
         mTabs = (PagerSlidingTabStripExtends) findViewById(R.id.main_tabs);
         mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawlayout);
     }
 
-    private void initActionBar() {
+    @Override
+    public void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
@@ -65,6 +53,7 @@ public class MainActivity extends ActionBarActivity {
         //显示返回按钮
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer_am);
+        initActionBarToggle();
 
     }
     private void initActionBarToggle() {
@@ -92,7 +81,8 @@ public class MainActivity extends ActionBarActivity {
     /**
      * 初始化Data
      */
-    private void initData() {
+    @Override
+    public void initData() {
 
         mMainTitles = UIUtils.getStringArr(R.array.main_titles);
 
@@ -104,7 +94,8 @@ public class MainActivity extends ActionBarActivity {
         // viewpager和tabs的一个绑定
         mTabs.setViewPager(mViewPager);
     }
-    private void initListener() {
+    @Override
+    public void initListener() {
         mTabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

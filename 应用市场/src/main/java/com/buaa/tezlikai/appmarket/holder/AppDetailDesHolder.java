@@ -23,12 +23,11 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 public class AppDetailDesHolder extends BaseHolder<AppInfoBean> implements OnClickListener {
 	@ViewInject(R.id.app_detail_des_tv_author)
 	TextView			mTvAuthor;
-
 	@ViewInject(R.id.app_detail_des_iv_arrow)
 	ImageView			mIvArrow;
-
 	@ViewInject(R.id.app_detail_des_tv_des)
 	TextView			mTvDes;
+
 	private boolean		isOpen	= true;
 	private int			mTvDesMeasuredHeight;
 
@@ -60,7 +59,6 @@ public class AppDetailDesHolder extends BaseHolder<AppInfoBean> implements OnCli
 				mTvDes.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
 		});
-
 	}
 
 	@Override
@@ -70,7 +68,6 @@ public class AppDetailDesHolder extends BaseHolder<AppInfoBean> implements OnCli
 
 	private void toggle(boolean isAnimation) {
 		if (isOpen) {// 折叠
-
 			/**
 			 mTvDes高度发生改变
 			 应有的高度-->7行的高度
@@ -106,18 +103,14 @@ public class AppDetailDesHolder extends BaseHolder<AppInfoBean> implements OnCli
 	public void doAnimation(int start, int end) {
 		ObjectAnimator animator = ObjectAnimator.ofInt(mTvDes, "height", start, end);
 		animator.start();
-		animator.addListener(new Animator.AnimatorListener() {
+		animator.addListener(new Animator.AnimatorListener() {//给动画加一个滚动效果，使得内容能够滚动
 
 			@Override
-			public void onAnimationStart(Animator arg0) {// 动画开始
-				// TODO
-
+			public void onAnimationStart(Animator arg0) {//动画开始
 			}
 
 			@Override
 			public void onAnimationRepeat(Animator arg0) {// 动画重复
-				// TODO
-
 			}
 
 			@Override
@@ -132,14 +125,10 @@ public class AppDetailDesHolder extends BaseHolder<AppInfoBean> implements OnCli
 						((ScrollView) parent).fullScroll(View.FOCUS_DOWN);
 						break;
 					}
-
 				}
 			}
-
 			@Override
 			public void onAnimationCancel(Animator arg0) {// 动画取消
-				// TODO
-
 			}
 		});
 	}
@@ -147,7 +136,6 @@ public class AppDetailDesHolder extends BaseHolder<AppInfoBean> implements OnCli
 	/**
 	 * @param i 指定行高
 	 * @param data 指定textView的内容
-	 * @return
 	 */
 	private int getShortHeight(int i, AppInfoBean data) {
 		//临时textView,只做测绘用
