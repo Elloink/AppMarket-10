@@ -20,6 +20,7 @@ public class AppFragment extends BaseFragment {
 
     private List<AppInfoBean> mDatas;
     private AppProtocol mProtocol;
+    private AppAdapter mAdapter;
 
     @Override
     public LoadingPager.LoadedResult initData() {//真正加载数据
@@ -39,9 +40,9 @@ public class AppFragment extends BaseFragment {
     protected View initSuccessView() {
         //返回视图
         ListView listView = ListViewFactory.createListView();
-
+        mAdapter = new AppAdapter(listView, mDatas);
         //设置adapter
-        listView.setAdapter(new AppAdapter(listView,mDatas));
+        listView.setAdapter(mAdapter);
 
         //返回listview
         return listView;

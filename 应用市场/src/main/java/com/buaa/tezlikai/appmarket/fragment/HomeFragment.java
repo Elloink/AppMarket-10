@@ -11,7 +11,9 @@ import com.buaa.tezlikai.appmarket.base.LoadingPager.LoadedResult;
 import com.buaa.tezlikai.appmarket.bean.AppInfoBean;
 import com.buaa.tezlikai.appmarket.bean.HomeBean;
 import com.buaa.tezlikai.appmarket.factory.ListViewFactory;
+import com.buaa.tezlikai.appmarket.holder.AppItemHolder;
 import com.buaa.tezlikai.appmarket.holder.PictureHolder;
+import com.buaa.tezlikai.appmarket.manager.DownloadManager;
 import com.buaa.tezlikai.appmarket.protocol.HomeProtocol;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class HomeFragment extends BaseFragment {
     private List<AppInfoBean> mDatas;  //listView的数据源
     private List<String> mPicutures;//轮播图
     private HomeProtocol mProtocol;
+    private HomeAdapter mAdapter;
 
     @Override
     public LoadedResult initData() {//真正加载数据
@@ -94,7 +97,8 @@ public class HomeFragment extends BaseFragment {
         listView.addHeaderView(headView);//添加图片轮播
 
         //设置Adapter
-        listView.setAdapter(new HomeAdapter(listView,mDatas));
+        mAdapter = new HomeAdapter(listView,mDatas);
+        listView.setAdapter(mAdapter);
 
         return listView;
     }
@@ -148,4 +152,29 @@ public class HomeFragment extends BaseFragment {
         }
         }
 
+    @Override
+    public void onResume() {
+        //手动添加监听
+        if (mAdapter != null){
+            List<AppItemHolder> appItemHolders = mAdapter.getAppItemHolders();
+            for (AppItemHolder appItemHolder : appItemHolders){
+                DownloadManager.getInstance().addObserver(appItemHolder);//重新添加
+            }
+            //手动刷新 -- 重新获取状态
+            mAdapter.notifyDataSetChanged();
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        //移除监听
+        if (mAdapter != null){
+            List<AppItemHolder> appItemHolders = mAdapter.getAppItemHolders();
+            for (AppItemHolder appItemHolder :appItemHolders){
+                DownloadManager.getInstance().deleteObserver(appItemHolder);//删除
+            }
+        }
+        super.onPause();
+    }
 }

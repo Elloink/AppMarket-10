@@ -1,8 +1,6 @@
 package com.buaa.tezlikai.appmarket.protocol;
 
 import com.buaa.tezlikai.appmarket.base.BaseProtocol;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
@@ -17,11 +15,11 @@ public class HotProtocol extends BaseProtocol<List<String>> {
 		return "hot";
 	}
 
-	@Override
+	/*@Override
 	public List<String> parseJson(String jsonString) {
 		Gson gson = new Gson();
 		return gson.fromJson(jsonString, new TypeToken<List<String>>() {
 		}.getType());
-	}
+	}*/
 
 }

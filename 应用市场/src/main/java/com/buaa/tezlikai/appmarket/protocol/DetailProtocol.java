@@ -2,7 +2,6 @@ package com.buaa.tezlikai.appmarket.protocol;
 
 import com.buaa.tezlikai.appmarket.base.BaseProtocol;
 import com.buaa.tezlikai.appmarket.bean.AppInfoBean;
-import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,12 +22,12 @@ public class DetailProtocol extends BaseProtocol<AppInfoBean>{
         return "detail";
     }
 
-    @Override
+   /* @Override
     public AppInfoBean parseJson(String jsonString) {
 
         Gson gson = new Gson();
         return gson.fromJson(jsonString, AppInfoBean.class);
-    }
+    }*/
 
     @Override
     public Map<String, String> getExtraParmas() {

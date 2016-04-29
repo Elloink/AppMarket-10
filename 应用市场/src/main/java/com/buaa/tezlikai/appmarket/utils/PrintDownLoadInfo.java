@@ -31,7 +31,6 @@ public class PrintDownLoadInfo {
 		case DownloadManager.STATE_INSTALLED:// 已安装
 			result = "已安装";
 			break;
-
 		default:
 			break;
 		}

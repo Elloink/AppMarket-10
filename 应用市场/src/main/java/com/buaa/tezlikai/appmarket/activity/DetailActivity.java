@@ -42,6 +42,7 @@ public class DetailActivity extends BaseActivity {
     @ViewInject(R.id.app_detail_safe)
     FrameLayout	mContainerSafe;
     private LoadingPager mLoadingPager;
+    private AppDetailBottomHolder mAppDetailBottomHolder;
 
     @Override
     public void init() {
@@ -130,12 +131,28 @@ public class DetailActivity extends BaseActivity {
         appDetailDesHolder.setDataAndRefreshHolderView(mDatas);
 
         //5.下载部分
-        AppDetailBottomHolder appDetailBottomHolder = new AppDetailBottomHolder();
-        mContainerBottom.addView(appDetailBottomHolder.getmHolderView());
-        appDetailBottomHolder.setDataAndRefreshHolderView(mDatas);
+        mAppDetailBottomHolder = new AppDetailBottomHolder();
+        mContainerBottom.addView(mAppDetailBottomHolder.getmHolderView());
+        mAppDetailBottomHolder.setDataAndRefreshHolderView(mDatas);
 
-        DownloadManager.getInstance().addObserver(appDetailBottomHolder);
+        DownloadManager.getInstance().addObserver(mAppDetailBottomHolder);
         return view;
     }
 
+    @Override
+    protected void onPause() {//界面不可见的时候移除观察者
+        if (mAppDetailBottomHolder != null){
+            DownloadManager.getInstance().deleteObserver(mAppDetailBottomHolder);
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {//界面可见的时候添加观察者
+        if (mAppDetailBottomHolder != null){
+            //开启监听的时候，手动的去过去一下最新的状态
+            mAppDetailBottomHolder.addObserverAndRerefresh();
+        }
+        super.onResume();
+    }
 }

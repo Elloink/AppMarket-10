@@ -70,9 +70,11 @@ public class DownloadManager { //
         notifyObservers(info);
 
         //得到线程池，执行任务
-        ThreadPoolFactory.getDownLoadPool().execute(new DownLoadTask(info));
-    }
+        DownLoadTask task = new DownLoadTask(info);
+        info.task =task;//downInfo身上的task赋值
 
+        ThreadPoolFactory.getDownLoadPool().execute(task);
+    }
 
     private class DownLoadTask implements Runnable {
 
@@ -87,39 +89,61 @@ public class DownloadManager { //
         public void run() {
             //正在发起网络请求下载apk
             try {//进入的run()方法说明已经进入线程池中了
+                /*------------------- 当前状态 : 下载中状态----------------------*/
+                mInfo.state = STATE_DOWNLOADING;
+                notifyObservers(mInfo);
 
+                long initRange = 0;
+                File saveApk = new File(mInfo.savePath);
+                if (saveApk.exists()){
+                    initRange = saveApk.length();//未下载完成的apk已有的长度
+                }
+
+                mInfo.curProgress = initRange;//③处理初始进度
                 //下载地址
                 String url = Constants.URLS.DOWNLOADBASEURL;
                 HttpUtils httpUtils = new HttpUtils();
                 //相关参数
                 RequestParams params = new RequestParams();
                 params.addQueryStringParameter("name", mInfo.downloadUrl);
-                params.addQueryStringParameter("range", 0 + "");
+                params.addQueryStringParameter("range", initRange + "");//①处理请求
 
                 ResponseStream responseStream = httpUtils.sendSync(HttpMethod.GET, url, params);
 
                 if (responseStream.getStatusCode() == 200) {
                     InputStream in = null;
                     FileOutputStream out = null;
+                    boolean isPause = false;
                     try {
                         in = responseStream.getBaseStream();
                         File saveFile = new File(mInfo.savePath);
-                        out = new FileOutputStream(saveFile);
+                        out = new FileOutputStream(saveFile,true);//②处理文件写入
 
                         byte[] buffer = new byte[1024];
                         int len = -1;
 
                         while ((len = in.read(buffer)) != -1) {
+                            if (mInfo.state == STATE_PAUSEDOWNLOAD){
+                                isPause = true;
+                                break;
+                            }
+
                             out.write(buffer, 0, len);
                             mInfo.curProgress += len;
                             /*------------------- 当前状态 : 下载中状态----------------------*/
                             mInfo.state = STATE_DOWNLOADING;
                             notifyObservers(mInfo);
                         }
-                         /*------------------- 当前状态 : 下载完成状态----------------------*/
-                        mInfo.state = STATE_DOWNLOADED;
-                        notifyObservers(mInfo);
+                        if (isPause){//用户暂停下载走到这里来了
+                            /*==========暂停状态============*/
+                            mInfo.state = STATE_PAUSEDOWNLOAD;
+                            notifyObservers(mInfo);
 
+                        }else {//下载完成走到这里
+                            /*------------------- 当前状态 : 下载完成状态----------------------*/
+                            mInfo.state = STATE_DOWNLOADED;
+                            notifyObservers(mInfo);
+                        }
                     } finally {
                         IOUtils.close(out);
                         IOUtils.close(in);
@@ -200,8 +224,22 @@ public class DownloadManager { //
         info.curProgress = 0;
         return info;
     }
+    //暂停下载
+    public void pause(DownLoadInfo info) {
+        /*------------- 暂停状态 --------------*/
+        info.state = STATE_PAUSEDOWNLOAD;
+        notifyObservers(info);
+    }
 
-
+    //取消下载
+    public void cancel(DownLoadInfo info) {
+        Runnable task = info.task;
+        //找到线程池，移除任务
+        ThreadPoolFactory.getDownLoadPool().removeTask(task);
+          /*------------- 未下载 --------------*/
+        info.state = STATE_UNDOWNLOAD;
+        notifyObservers(info);
+    }
 
     /*=============== 自定义观察者设计模式  begin ===============*/
     public interface DownLoadObserver {

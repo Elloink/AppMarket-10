@@ -4,6 +4,7 @@ import com.buaa.tezlikai.appmarket.conf.Constants;
 import com.buaa.tezlikai.appmarket.utils.FileUtils;
 import com.buaa.tezlikai.appmarket.utils.IOUtils;
 import com.buaa.tezlikai.appmarket.utils.LogUtils;
+import com.google.gson.Gson;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -16,6 +17,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -30,7 +33,6 @@ public abstract class BaseProtocol<T> {
 			LogUtils.sf("###读取本地文件-->" + getCacheFile(index).getAbsolutePath());
 			return localData;
 		}
-
 		/*=============== 发送网络请求 ===============*/
 		String jsonString = getDataFromNet(index);
 
@@ -156,6 +158,13 @@ public abstract class BaseProtocol<T> {
 
 	public abstract String getInterfaceKey();
 
-	public abstract T parseJson(String jsonString);
+//	public abstract T parseJson(String jsonString);
+
+	protected T parseJson(String json){//工作中经常使用，通过反射直接实现json解析，不需要子类再解析
+		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
+		Type[] args = genericSuperclass.getActualTypeArguments();
+		Type type = args[0];
+		return new Gson().fromJson(json,type);
+	}
 
 }

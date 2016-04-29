@@ -3,7 +3,6 @@ package com.buaa.tezlikai.appmarket.holder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.buaa.tezlikai.appmarket.R;
 import com.buaa.tezlikai.appmarket.base.BaseHolder;
@@ -28,7 +27,7 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 	@ViewInject(R.id.app_detail_download_btn_favo)
 	Button	mBtnFavo;
 	@ViewInject(R.id.app_detail_download_btn_download)
-	ProgressButton mBtnDownLoad;
+	ProgressButton mProgressButton;
 	private AppInfoBean mData;
 
 	@Override
@@ -37,7 +36,7 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 		ViewUtils.inject(this, view);
 		mBtnShare.setOnClickListener(this);
 		mBtnFavo.setOnClickListener(this);
-		mBtnDownLoad.setOnClickListener(this);
+		mProgressButton.setOnClickListener(this);
 		return view;
 	}
 
@@ -50,33 +49,34 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 	}
 
 	public void refreshProgressBtnUI(DownLoadInfo info) {
-		mBtnDownLoad.setBackgroundResource(R.drawable.selector_app_detail_bottom_normal);
+		mProgressButton.setBackgroundResource(R.drawable.selector_app_detail_bottom_normal);
 		switch (info.state){
 			case DownloadManager.STATE_UNDOWNLOAD://未下载
-				mBtnDownLoad.setText("下载");
+				mProgressButton.setText("下载");
 				break;
 			case DownloadManager.STATE_DOWNLOADING:// 下载中
-				mBtnDownLoad.setBackgroundResource(R.drawable.selector_app_detail_bottom_downloading);
-				mBtnDownLoad.setProgressEnable(true);
-				mBtnDownLoad.setMax(info.max);
-				mBtnDownLoad.setProgress(info.curProgress);
+				mProgressButton.setBackgroundResource(R.drawable.selector_app_detail_bottom_downloading);
+				mProgressButton.setProgressEnable(true);
+				mProgressButton.setMax(info.max);
+				mProgressButton.setProgress(info.curProgress);
 				int progress = (int) (info.curProgress * 100.f / info.max +.5f);
-				mBtnDownLoad.setText(progress + "%");
+				mProgressButton.setText(progress + "%");
 				break;
 			case DownloadManager.STATE_PAUSEDOWNLOAD:// 暂停下载
-				mBtnDownLoad.setText("继续下载");
+				mProgressButton.setText("继续下载");
 				break;
 			case DownloadManager.STATE_WAITINGDOWNLOAD:// 等待下载
-				mBtnDownLoad.setText("等待中");
+				mProgressButton.setText("等待中");
 				break;
 			case DownloadManager.STATE_DOWNLOADFAILED:// 下载失败
-				mBtnDownLoad.setText("重试");
+				mProgressButton.setText("重试");
 				break;
 			case DownloadManager.STATE_DOWNLOADED:// 下载完成
-				mBtnDownLoad.setText("安装");
+				mProgressButton.setProgressEnable(false);
+				mProgressButton.setText("安装");
 				break;
 			case DownloadManager.STATE_INSTALLED:// 已安装
-				mBtnDownLoad.setText("打开");
+				mProgressButton.setText("打开");
 				break;
 			default:
 				break;
@@ -113,15 +113,6 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 				default:
 					break;
 			}
-
-			break;
-
-
-		case R.id.app_detail_download_btn_share:
-			Toast.makeText(UIUtils.getContext(), "app_detail_download_btn_share", Toast.LENGTH_LONG).show();
-			break;
-		case R.id.app_detail_download_btn_favo:
-			Toast.makeText(UIUtils.getContext(), "app_detail_download_btn_favo", Toast.LENGTH_LONG).show();
 			break;
 		default:
 			break;
@@ -142,7 +133,7 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 	 */
 	private void installApk(DownLoadInfo info) {
 		File apkFile = new File(info.savePath);
-		CommonUtils.installApp(UIUtils.getContext(),apkFile);
+		CommonUtils.installApp(UIUtils.getContext(), apkFile);
 	}
 
 	/**
@@ -150,6 +141,7 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 	 * @param info
 	 */
 	private void cancelDownLoad(DownLoadInfo info) {
+		DownloadManager.getInstance().cancel(info);
 
 	}
 
@@ -158,6 +150,7 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 	 * @param info
 	 */
 	private void pauseDownLoad(DownLoadInfo info) {
+		DownloadManager.getInstance().pause(info);
 
 	}
 
@@ -173,6 +166,12 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 	/*-----------收到数据改变，更新UI-------------*/
 	@Override
 	public void onDownLoadInfoChange(final DownLoadInfo info) {
+		//过滤DownLoadInfo,防止DownLoadInfo混乱，
+		// 解决问题:比如你点击一个下载，然后在打开另一个应用下载界面的时候它会直接下载的问题
+		if (!info.packageName.equals(mData.packageName)){
+			return;
+		}
+
 		PrintDownLoadInfo.printDownLoadInfo(info);
 
 		UIUtils.postTaskSafely(new Runnable() {
@@ -182,4 +181,16 @@ public class AppDetailBottomHolder extends BaseHolder<AppInfoBean> implements On
 			}
 		});
 	}
+
+	public void addObserverAndRerefresh(){
+		DownloadManager.getInstance().addObserver(this);
+
+		//手动刷新
+		DownLoadInfo downLoadInfo = DownloadManager.getInstance().getDownLoadInfo(mData);
+		/*--------------可以发送消息，也可以直接调用refreshProgressBtnUI()方法-------------*/
+//		DownloadManager.getInstance().notifyObservers(downLoadInfo);//方式一
+		refreshProgressBtnUI(downLoadInfo);//方式二
+
+	}
+
 }

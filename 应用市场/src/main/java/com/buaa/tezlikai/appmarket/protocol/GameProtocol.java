@@ -2,14 +2,7 @@ package com.buaa.tezlikai.appmarket.protocol;
 
 import com.buaa.tezlikai.appmarket.base.BaseProtocol;
 import com.buaa.tezlikai.appmarket.bean.AppInfoBean;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,17 +12,16 @@ public class GameProtocol extends BaseProtocol<List<AppInfoBean>> {
 
 	@Override
 	public String getInterfaceKey() {
-		// TODO
 		return "game";
 	}
 
-	@Override
+	/*@Override
 	public List<AppInfoBean> parseJson(String jsonString) {
 		Gson gson = new Gson();
-		/*=============== 泛型解析 ===============*/
+		*//*=============== 泛型解析 ===============*//*
 		// return gson.fromJson(jsonString, new TypeToken<List<AppInfoBean>>() {
 		// }.getType());
-		/*=============== 结点解析 ===============*/
+		*//*=============== 结点解析 ===============*//*
 
 		List<AppInfoBean> appInfoBeans = new ArrayList<AppInfoBean>();
 		// 获得json的解析器
@@ -76,5 +68,5 @@ public class GameProtocol extends BaseProtocol<List<AppInfoBean>> {
 		}
 		// 返回结果
 		return appInfoBeans;
-	}
+	}*/
 }

@@ -13,12 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStripExtends;
 import com.buaa.tezlikai.appmarket.base.BaseActivity;
 import com.buaa.tezlikai.appmarket.base.BaseFragment;
 import com.buaa.tezlikai.appmarket.factory.FragmentFactory;
+import com.buaa.tezlikai.appmarket.holder.MenuHolder;
 import com.buaa.tezlikai.appmarket.utils.LogUtils;
 import com.buaa.tezlikai.appmarket.utils.UIUtils;
 
@@ -29,6 +31,7 @@ public class MainActivity extends BaseActivity {
     private String[] mMainTitles;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private FrameLayout mMain_menu;
 
     /**
      * 初始化View
@@ -39,6 +42,7 @@ public class MainActivity extends BaseActivity {
         mTabs = (PagerSlidingTabStripExtends) findViewById(R.id.main_tabs);
         mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawlayout);
+        mMain_menu = (FrameLayout) findViewById(R.id.main_menu);
     }
 
     @Override
@@ -93,6 +97,10 @@ public class MainActivity extends BaseActivity {
         // Bind the tabs to the ViewPager
         // viewpager和tabs的一个绑定
         mTabs.setViewPager(mViewPager);
+
+        MenuHolder menuHolder = new MenuHolder();
+        mMain_menu.addView(menuHolder.getmHolderView());
+        menuHolder.setDataAndRefreshHolderView(null);
     }
     @Override
     public void initListener() {
