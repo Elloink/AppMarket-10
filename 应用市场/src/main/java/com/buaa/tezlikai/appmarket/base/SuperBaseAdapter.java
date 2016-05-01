@@ -62,7 +62,6 @@ public abstract class SuperBaseAdapter<ITEMBEANTYPE> extends BaseAdapter impleme
 
 	@Override
 	public int getViewTypeCount() {
-		// TODO
 		return super.getViewTypeCount() + 1;// 2
 	}
 

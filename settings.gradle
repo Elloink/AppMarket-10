@@ -1,1 +1,1 @@
-include ':应用市场', ':sample', ':library'
+include ':应用市场', ':library'

@@ -62,14 +62,15 @@ public class CircleProgressView extends LinearLayout {
 		View view = View.inflate(context, R.layout.inflate_circleprogressview, this);
 
 		mIcon = (ImageView) view.findViewById(R.id.circleProgressView_iv_icon);
+		mIcon.setBackgroundColor(Color.TRANSPARENT);
 		mNote = (TextView) view.findViewById(R.id.circleProgressView_tv_note);
 	}
 
-	/*// ondraw onmeasure onlayout
+	// ondraw onmeasure onlayout
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);// 绘制背景,透明图片
-	}*/
+	}
 
 	@Override
 	protected void dispatchDraw(Canvas canvas) {

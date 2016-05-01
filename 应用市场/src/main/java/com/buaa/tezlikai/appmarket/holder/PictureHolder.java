@@ -85,13 +85,11 @@ public class PictureHolder extends BaseHolder<List<String>> {
 
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				// TODO
 
 			}
 
 			@Override
 			public void onPageScrollStateChanged(int state) {
-				// TODO
 			}
 		});
 

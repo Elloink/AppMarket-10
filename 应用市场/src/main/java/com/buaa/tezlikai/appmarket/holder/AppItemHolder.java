@@ -1,5 +1,6 @@
 package com.buaa.tezlikai.appmarket.holder;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -40,6 +41,7 @@ public class AppItemHolder extends BaseHolder<AppInfoBean> implements View.OnCli
     private TextView mTvTitle;
     @ViewInject(R.id.item_appinfo_circleprogressview)
     private CircleProgressView mCircleProgressView;
+
     private AppInfoBean mData;
 
 
@@ -57,6 +59,7 @@ public class AppItemHolder extends BaseHolder<AppInfoBean> implements View.OnCli
     public void refreshHolderView(AppInfoBean data) {
         //  清除复用ConvertView之后的progress效果
         mCircleProgressView.setProgress(0);
+        mCircleProgressView.setBackgroundColor(Color.TRANSPARENT);
 
         mData = data;
         mTvTitle.setText(data.name);
@@ -122,9 +125,22 @@ public class AppItemHolder extends BaseHolder<AppInfoBean> implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.item_appinfo_circleprogressview:
+                mCircleProgressView.setBackgroundColor(Color.WHITE);
                 DownLoadInfo info = DownloadManager.getInstance().getDownLoadInfo(mData);
-                switch (info.state){
-                    case DownloadManager.STATE_UNDOWNLOAD://未下载
+
+                switch (info.state) {
+                    /**
+                     状态(编程记录)     | 用户行为(触发操作)
+                     ----------------| -----------------
+                     未下载			| 去下载
+                     下载中			| 暂停下载
+                     暂停下载			| 断点继续下载
+                     等待下载			| 取消下载
+                     下载失败 			| 重试下载
+                     下载完成 			| 安装应用
+                     已安装 			| 打开应用
+                     */
+                    case DownloadManager.STATE_UNDOWNLOAD:// 未下载
                         doDownLoad(info);
                         break;
                     case DownloadManager.STATE_DOWNLOADING:// 下载中
@@ -145,6 +161,7 @@ public class AppItemHolder extends BaseHolder<AppInfoBean> implements View.OnCli
                     case DownloadManager.STATE_INSTALLED:// 已安装
                         openApk(info);
                         break;
+
                     default:
                         break;
                 }
