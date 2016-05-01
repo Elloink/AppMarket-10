@@ -100,6 +100,7 @@ public class HomeFragment extends BaseFragment {
         mAdapter = new HomeAdapter(listView,mDatas);
         listView.setAdapter(mAdapter);
 
+
         return listView;
     }
 

@@ -12,7 +12,7 @@ public class Constants {
 
 	public static final int	DEBUGLEVEL	= LogUtils.LEVEL_ALL;//LEVEL_ALL,显示所有的日子,OFF:关闭日志的显示
 	public static final class URLS {//资源相关
-		public static final String	BASEURL			= "http://192.168.3.92:8080/GooglePlayServer/";
+		public static final String	BASEURL			= "http://192.168.3.138:8080/GooglePlayServer/";
 		// http://localhost:8080/GooglePlayServer/image?name=
 
 		public static final String	IMAGEBASEURL	= BASEURL + "image?name=";

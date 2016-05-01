@@ -59,6 +59,7 @@ public class AppDetailPicHolder extends BaseHolder<AppInfoBean> {
 				params.leftMargin = UIUtils.dip2Px(5);
 			}
 			mContainerPic.addView(rl, params);
+
 		}
 	}
 }
